@@ -29,6 +29,7 @@ class start extends StatefulWidget {
 }
 
 class _startState extends State<start> {
+  
   void initState() {
     super.initState();
     _navigatetohome();
