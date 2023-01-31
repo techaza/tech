@@ -1,10 +1,13 @@
 import 'package:fb/screens/Auth/otp.dart';
+import 'package:fb/screens/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 
 class loginpage extends StatefulWidget {
+  static String verify = "";
   const loginpage({super.key});
 
   @override
@@ -12,6 +15,8 @@ class loginpage extends StatefulWidget {
 }
 
 class _loginpageState extends State<loginpage> {
+  TextEditingController countrycode = TextEditingController();
+  var phone = "";
   final controller1 = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -69,13 +74,16 @@ class _loginpageState extends State<loginpage> {
               child: Column(
                 children: [
                   TextFormField(
+                    onChanged: ((value) {
+                      phone = value;
+                    }),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter some text';
                       }
                       return null;
                     },
-                    obscureText: true,
+                    obscureText: false,
                     controller: controller1,
                     keyboardType: TextInputType.number,
                     style: TextStyle(
@@ -117,9 +125,22 @@ class _loginpageState extends State<loginpage> {
                   "By Clicking login , you agree to our terms and conditions"),
             ),
             ElevatedButton(
-                onPressed: (() => Navigator.of(context)
-                    .push(MaterialPageRoute(builder: ((context) => otp())))),
-                child: Text("LOGIN"))
+                onPressed: (() async {
+                  await FirebaseAuth.instance.verifyPhoneNumber(
+                    phoneNumber: "+91 ${controller1.text}",
+                    verificationCompleted: (PhoneAuthCredential credential) {},
+                    verificationFailed: (FirebaseAuthException e) {},
+                    codeSent: (String verificationId, int? resendToken) {
+                      loginpage.verify = verificationId;
+                      Navigator.of(context).push(PageRouteBuilder(
+                          pageBuilder:
+                              ((context, animation, secondaryAnimation) =>
+                                  otp())));
+                    },
+                    codeAutoRetrievalTimeout: (String verificationId) {},
+                  );
+                }),
+                child: Text("LOGIN")),
           ]),
         ),
       ),

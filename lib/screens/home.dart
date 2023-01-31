@@ -87,12 +87,9 @@ class _homeState extends State<home> with SingleTickerProviderStateMixin {
                     width: 30,
                   ),
                 ),
-                GestureDetector(
-                  onDoubleTap: () => add(),
-                  child: Image.asset(
-                    "assets/images/messenger.png",
-                    width: 30,
-                  ),
+                Image.asset(
+                  "assets/images/messenger.png",
+                  width: 30,
                 )
               ],
               bottom: TabBar(
@@ -122,8 +119,9 @@ class _homeState extends State<home> with SingleTickerProviderStateMixin {
     // ignore: dead_code
   }
 
-  add() {
-    Map<String, String> student = {'name': "gii"};
-    dbrf.push().set(student);
-  }
+  // add() {
+    
+  //   Map<String, String> student = {'name': "gii"};
+  //   dbrf.push().set(student);
+  // }
 }
