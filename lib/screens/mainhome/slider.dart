@@ -12,7 +12,7 @@ class slider1 extends StatelessWidget {
       height: 200,
       child: ListView.builder(
           itemCount: Names.length,
-          physics: ScrollPhysics(),
+          physics: const ScrollPhysics(),
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
           itemBuilder: ((context, index) => Padding(
@@ -30,7 +30,7 @@ class slider1 extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     CircleAvatar(
@@ -47,7 +47,7 @@ class slider1 extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 110, left: 10),
                       child: Text(
                         Names[index],
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
                     )
                   ],

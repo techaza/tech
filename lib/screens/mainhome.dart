@@ -1,20 +1,17 @@
 import 'dart:io';
 
-import 'package:fb/contents/contents.dart';
 import 'package:fb/screens/mainhome/Listedhome.dart';
 import 'package:fb/screens/mainhome/slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 class mainhome extends StatefulWidget {
+  const mainhome({super.key});
   static String? usrkey;
   static String? posturl;
-  const mainhome({super.key});
-  static List posts = [];
 
   @override
   State<mainhome> createState() => _mainhomeState();
@@ -22,6 +19,7 @@ class mainhome extends StatefulWidget {
 
 class _mainhomeState extends State<mainhome> {
   late DatabaseReference dbrf;
+  List posts = [];
   late DatabaseReference postrf;
   String? uId;
   String? url;
@@ -30,19 +28,21 @@ class _mainhomeState extends State<mainhome> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    uId = FirebaseAuth.instance.currentUser!.uid;
+
     dbrf = FirebaseDatabase.instance.ref().child('Accounts');
     postrf = FirebaseDatabase.instance.ref().child('posts');
     getAccount();
-    getposts();
-   
+    setState(() {
+      getposts();
+    });
+    // postupload();
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(children: [
-        SizedBox(
+        const SizedBox(
           height: 15,
         ),
         Row(
@@ -52,7 +52,7 @@ class _mainhomeState extends State<mainhome> {
               radius: 25,
               backgroundImage: mainhome.usrkey != null
                   ? NetworkImage(mainhome.usrkey!)
-                  : AssetImage("assets/images/book.png") as ImageProvider,
+                  : const AssetImage("assets/images/book.png") as ImageProvider,
             ),
             Container(
                 height: 50,
@@ -60,51 +60,54 @@ class _mainhomeState extends State<mainhome> {
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(20),
-                    color: Color.fromARGB(255, 255, 253, 253)),
-                child: TextField(
+                    color: const Color.fromARGB(255, 255, 253, 253)),
+                child: const TextField(
                   decoration: InputDecoration(
                       hintText: "      Write something here   ",
                       border: InputBorder.none),
                 )),
             IconButton(
-              onPressed: (() {
-                return uploadpic();
-              }),
-              icon: Icon(Icons.image),
+              onPressed: (() => uploadpic()),
+              icon: const Icon(Icons.image),
               color: Colors.green,
             )
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 7),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 7),
           child: Divider(
             thickness: 10,
             color: Colors.grey,
           ),
         ),
-        slider1(),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 7),
+        const slider1(),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 7),
           child: Divider(
             thickness: 10,
             color: Colors.grey,
           ),
         ),
-        Listed1()
+        Listed1(
+          posts: posts,
+        )
       ]),
     );
   }
   ///////////////////////////////////////////////////////
 
   Future<void> getAccount() async {
-    
-    print('-----------------${uId}--------');
+    uId = FirebaseAuth.instance.currentUser!.uid;
+    // print("------------------------------------------");
+    // print("------------------------------------------");
+    // print('-----------------${uId}--------');
     await dbrf.orderByChild('uid').equalTo(uId).once().then((value) {
       print('----------------');
       final vall = value.snapshot.value as Map?;
+      // print("-------------------$vall-------------------------");
+
       if (vall != null) {
         vall.forEach((key, value) {
-          print("--------------------------------------------");
           print('----$key   $value');
           print("--------------------------------------------");
           setState(() {
@@ -132,11 +135,11 @@ class _mainhomeState extends State<mainhome> {
     try {
       await ref_to_upload.putFile(File(imagefile.path));
       url = await ref_to_upload.getDownloadURL();
-      setState(() {
-        mainhome.posturl = url;
-        add();
-        // posts.add(mainhome.posturl);
-      });
+      // setState(() {
+      mainhome.posturl = url!;
+      add();
+      // posts.add(mainhome.posturl);
+      // });
 
       print(mainhome.posturl);
     } catch (error) {}
@@ -150,19 +153,21 @@ class _mainhomeState extends State<mainhome> {
   getposts() async {
     DatabaseReference ref = FirebaseDatabase.instance.ref('postes');
     await ref.get().then((value) {
-      final vall = value.value as Map<String, dynamic>?;
+      final vall = value.value as Map?;
       if (vall != null) {
         setState(() {
           vall.forEach((key, value) {
-            k = value;
-            ;
+            // k = value;
+            posts.add(value);
+            // posts[0] = 'hhhhhhh';
           });
-          print('------------------------------');
+          print('-----------$value-------------------');
           print('------------------------------');
           print('------------------------------');
         });
       }
     });
-    // print('------$k----------');
+    // print('------$posts----------');
+    // print('------${posts[0]['postname']}----------');
   }
 }
