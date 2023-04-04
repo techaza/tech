@@ -1,23 +1,18 @@
 // import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:fb/screens/Auth/login/login.dart';
-import 'package:fb/screens/Auth/login/profilepic.dart';
 import 'package:fb/screens/Auth/login/signin.dart';
 import 'package:fb/screens/Auth/loginpage.dart';
 
-import 'package:fb/screens/Auth/otp.dart';
-import 'package:fb/screens/home.dart';
-import 'package:fb/screens/mainhome.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: home(),
+    home: start(),
   ));
 }
 
@@ -29,37 +24,38 @@ class start extends StatefulWidget {
 }
 
 class _startState extends State<start> {
-  
+  @override
   void initState() {
     super.initState();
     _navigatetohome();
   }
 
   _navigatetohome() async {
-    await Future.delayed(Duration(seconds: 5), () {});
+    await Future.delayed(const Duration(seconds: 5), () {});
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => hm()));
+        context, MaterialPageRoute(builder: (context) => const hm()));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: login());
+    return const Scaffold(body: login());
   }
 }
 
 class hm extends StatelessWidget {
   const hm({super.key});
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('facebook')),
+        appBar: AppBar(title: const Text('facebook')),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
               height: MediaQuery.of(context).size.height / 5,
             ),
-            Center(
+            const Center(
               child: Image(
                 width: 150,
                 image: NetworkImage(
@@ -67,10 +63,10 @@ class hm extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Text('Facebook helps you connect '),
+            const Text('Facebook helps you connect '),
             SizedBox(
               height: MediaQuery.of(context).size.height / 7,
             ),
@@ -78,7 +74,7 @@ class hm extends StatelessWidget {
               "assets/images/friends.png",
               width: 100,
             ),
-            SizedBox(
+            const SizedBox(
               height: 100,
             ),
             Row(
@@ -87,10 +83,10 @@ class hm extends StatelessWidget {
                 ElevatedButton.icon(
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: ((context) => loginpage())));
+                          builder: ((context) => const loginpage())));
                     },
-                    icon: Icon(Icons.login_outlined),
-                    label: Text("Login")),
+                    icon: const Icon(Icons.login_outlined),
+                    label: const Text("Login")),
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 4,
                 ),
@@ -99,8 +95,8 @@ class hm extends StatelessWidget {
                       Navigator.of(context).push(
                           MaterialPageRoute(builder: ((context) => signin())));
                     },
-                    icon: Icon(Icons.login_outlined),
-                    label: Text("SignUp")),
+                    icon: const Icon(Icons.login_outlined),
+                    label: const Text("SignUp")),
               ],
             )
           ],
